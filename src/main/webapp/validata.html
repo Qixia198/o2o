@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<title>用户注册</title>
+		<!--<link rel="stylesheet" type="text/css" href="style/index.css"/>-->
+		<link>
+		<script type="text/javascript" src="static/jquery-2.0.3.js"></script>
+	</head>
+	<style type="text/css">
+		body {
+			margin-top: 20px;
+		}
+
+		.box {
+			font-size: 13px;
+			margin: 0 auto;
+			width: 80%;
+		}
+
+		.box-head {
+			width: 30%;
+			text-align: center;
+			padding: 15px 20px;
+			font-size: 24px;
+		}
+
+		.box-body {
+			padding: 10px 20px;
+		}
+
+		.box-body th {
+			font-weight: normal;
+			vertical-align: top;
+			padding-top: 12px;
+		}
+
+		.box-body tr:last-child {
+			text-align: center;
+		}
+
+		.box-body input,
+		button {
+			vertical-align: middle;
+			font-family: Tahoma, simsun;
+			font-size: 12px;
+		}
+
+		.box-body input[type=radio] {
+			height: 38px;
+		}
+
+		.box-body input[type=text],
+		.box-body input[type=password] {
+			border-color: #bbb;
+			height: 38px;
+			font-size: 14px;
+			border-radius: 2px;
+			outline: 0;
+			border: #ccc 1px solid;
+			padding: 0 10px;
+			width: 350px;
+			-webkit-transition: box-shadow .5s;
+			margin-bottom: 15px;
+		}
+
+		.box-body input[type=text]:hover,
+		.box-body input[type=text]:focus,
+		.box-body input[type=password]:hover,
+		.box-body input[type=password]:focus {
+			border: 1px solid #56b4ef;
+			box-shadow: inset 0 1px 3px rgba(0, 0, 0, .05), 0 0 8px rgba(82, 168, 236, .6);
+			-webkit-transition: box-shadow .5s;
+		}
+
+		.box-body input::-webkit-input-placeholder {
+			color: #999;
+			-webkit-transition: color .5s;
+		}
+
+		.box-body input:focus::-webkit-input-placeholder,
+		input:hover::-webkit-input-placeholder {
+			color: #c2c2c2;
+			-webkit-transition: color .5s;
+		}
+
+		.box-body button[type=submit] {
+			padding: 4px 15px;
+			cursor: pointer;
+			width: 120px;
+			height: 40px;
+			background: #4393C9;
+			border: 1px solid #fff;
+			color: #fff;
+			font: 16px bolder;
+		}
+
+		.box-body button[type=reset] {
+			margin-left: 30px;
+			cursor: pointer;
+			width: 120px;
+			height: 40px;
+			background: #4393C9;
+			border: 1px solid #fff;
+			color: #fff;
+			font: 16px bolder;
+		}
+
+		.box-body .error {
+			border: 1px solid #FF3300;
+			background: #FFF2E5;
+			font-size: 10px;
+			height: 30px;
+			line-height: 30px;
+			margin-bottom: 10px;
+			padding: 0 10px;
+		}
+
+		.box-body .success {
+			border: 1px solid #01BE00;
+			background: #E6FEE4;
+			font-size: 10px;
+			height: 30px;
+			line-height: 30px;
+			margin-bottom: 10px;
+			padding: 0 10px;
+		}
+	</style>
+	<body>
+		<div class="box">
+			<div class="box-head">填写注册信息</div>
+			<div class="box-body">
+				<form id="registerForm" action="" method="post" onsubmit="return checkForm()">
+					<table>
+						<tr>
+							<th>用户名称：</th>
+							<td><input type="text" id="userName" name="userName" placeholder="长度2-12位以内的中英文字符和数字"></td>
+							<td>
+								<div><span class="errorMsg"></span></div>
+							</td>
+						</tr>
+						<tr>
+							<th>密　　码：</th>
+							<td><input type="password" id="passWord" name="passWord" placeholder="长度4-12位任意字符"></td>
+							<td>
+								<div></div>
+							</td>
+						</tr>
+						<tr>
+							<th>确认密码：</th>
+							<td><input type="password" id="confirmPwd" name="confirmPwd" placeholder="请再次输入密码进行确认"></td>
+							<td>
+								<div></div>
+							</td>
+						</tr>
+						<tr>
+							<th>性　　别：</th>
+							<td><input type="radio" id="sexMale" name="sex" value="1" /><label for="sexMale">男</label>&nbsp;&nbsp;
+								<input type="radio" id="sexFemale" name="sex" value="0" /><label for="sexFemale">女</label></td>
+							<td>
+								<div></div>
+							</td>
+						</tr>
+						<tr>
+							<th>手机号码：</th>
+							<td><input type="text" id="tel" name="tel" placeholder="13、14、15、17、18开头的11位手机号"></td>
+							<td>
+								<div></div>
+							</td>
+						</tr>
+						<tr>
+							<th>电子邮箱：</th>
+							<td><input type="email" id="email" name="email" placeholder="用户名@域名（域名后缀至少2个字符）"></td>
+							<td>
+								<div></div>
+							</td>
+						</tr>
+					</table>
+					<div style="margin-top: 20px;margin-left: 70px;">
+						<button type="submit" id="submitFormBtn">注册</button>
+						<button type="reset">重置</button>
+						<!-- <button type="button" id="stop">停止</button> -->
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(function(){
+			$("#submitFormBtn").click(function(){
+				//验证用户名
+				var username = $("#username").val();
+				var usernamePatt = /^\w{4,12}$/;
+				if( ! usernamePatt.test(username)){
+					$("span.errorMsg").text("用户名不合法");
+					return false;
+				}
+
+				//验证密码
+				var password = $("#passWord").val();
+				var passwordPatt = /^\w{5,12}$/;
+				if( ! passwordPatt.test(password)){
+					$("span.errorMsg").text("密码不合法");
+					return false;
+				}
+
+				//确认密码
+				var rePwd = $("#confirmPwd").val();
+				if(password != rePwd){
+					$("span.errorMsg").text("两次输入密码不一致");
+					return false;
+				}
+
+				//邮箱
+				var emailText = $("#email").val();
+				if(emailText == null || emailText == ""){
+					$("span.errorMsg").text("邮箱不能为空");
+					return false;
+				}
+
+			});
+
+		});
+	</script>
+</html>
